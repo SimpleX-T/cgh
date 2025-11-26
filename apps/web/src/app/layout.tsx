@@ -13,7 +13,7 @@ const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" });
 
 export const metadata: Metadata = {
   title: "Celo Game Hub",
-  description: "A collection of classic games with AI-powered features.",
+  description: "A collection of classic games built on Celo and MiniPay",
 };
 
 export default function RootLayout({
