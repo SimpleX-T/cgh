@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, RotateCw, ChevronLeft, ChevronRight } from "lucide-react";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useLongPress } from "@/hooks/use-long-press";
+import { useSaveScore } from "@/hooks/use-save-score";
 
 const TETROMINOS = {
   I: {
@@ -71,6 +72,7 @@ const COLS = 10;
 
 export default function Tetris() {
   const { consumeLife } = useUserProfile();
+  const { mutate: saveScore } = useSaveScore();
   // Fix: Use Array.from to create independent rows
   const [grid, setGrid] = useState(
     Array.from({ length: ROWS }, () => Array(COLS).fill(0))
@@ -139,6 +141,7 @@ export default function Tetris() {
     ) {
       setGameOver(true);
       consumeLife();
+      saveScore({ gameId: "tetris", score });
     }
   };
 

@@ -42,6 +42,12 @@ export function SiteHeader() {
         </Link>
 
         <div className="flex items-center space-x-2 sm:space-x-4">
+          <Link
+            href="/leaderboard"
+            className="text-sm font-medium hover:text-primary transition-colors mr-2"
+          >
+            Leaderboard
+          </Link>
           {profile && (
             <div className="flex items-center space-x-4 mr-4">
               {/* Hearts */}

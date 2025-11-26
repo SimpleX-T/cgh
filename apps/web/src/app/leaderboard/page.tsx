@@ -11,24 +11,19 @@ interface LeaderboardEntry {
   userId: string;
   username: string;
   avatar: string;
-  score: number;
+  score: number | string;
+  isCurrency?: boolean;
 }
 
 export default function LeaderboardPage() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [gameId, setGameId] = useState("global"); // 'global' or specific gameId
+  const [gameId, setGameId] = useState("global");
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
       setLoading(true);
       try {
-        // Fetch leaderboard data
-        // We need an endpoint for this. I'll assume GET /api/leaderboard?gameId=...
-        // If gameId is global, maybe we fetch top spenders or total hearts?
-        // For now, let's just fetch a specific game or placeholder.
-        // I'll implement the API endpoint for leaderboard next.
-        // Assuming the endpoint returns { entries: [] }
         const res = await fetch(`/api/leaderboard?gameId=${gameId}`);
         if (res.ok) {
           const data = await res.json();
@@ -52,17 +47,25 @@ export default function LeaderboardPage() {
           Leaderboard
         </h1>
 
-        <Tabs defaultValue="global" className="w-full max-w-3xl mx-auto" onValueChange={setGameId}>
-          <TabsList className="grid w-full grid-cols-4 mb-8">
+        <Tabs
+          defaultValue="global"
+          className="w-full max-w-3xl mx-auto"
+          onValueChange={setGameId}
+        >
+          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 mb-8 h-auto gap-2">
             <TabsTrigger value="global">Global</TabsTrigger>
             <TabsTrigger value="tetris">Tetris</TabsTrigger>
             <TabsTrigger value="snake">Snake</TabsTrigger>
             <TabsTrigger value="2048">2048</TabsTrigger>
+            <TabsTrigger value="f1-racing">F1</TabsTrigger>
+            <TabsTrigger value="breakout">Breakout</TabsTrigger>
           </TabsList>
 
           <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
             <CardHeader>
-              <CardTitle>Top Players</CardTitle>
+              <CardTitle>
+                {gameId === "global" ? "Top Spenders" : "Top Players"}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (
@@ -90,6 +93,7 @@ export default function LeaderboardPage() {
                       </div>
                       <div className="font-mono font-bold text-primary">
                         {entry.score}
+                        {entry.isCurrency && " cUSD"}
                       </div>
                     </div>
                   ))}

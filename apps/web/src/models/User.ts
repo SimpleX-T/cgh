@@ -17,6 +17,8 @@ export interface IUser extends Document {
     lastFreeRefillAt: Date | null;
     nextFreeRefillAt: Date | null;
   };
+  highScores: Map<string, number>;
+  playCounts: Map<string, number>;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -43,6 +45,16 @@ const UserSchema: Schema = new Schema(
     heartRefill: {
       lastFreeRefillAt: { type: Date, default: null },
       nextFreeRefillAt: { type: Date, default: null },
+    },
+    highScores: {
+      type: Map,
+      of: Number,
+      default: {},
+    },
+    playCounts: {
+      type: Map,
+      of: Number,
+      default: {},
     },
   },
   { timestamps: true }

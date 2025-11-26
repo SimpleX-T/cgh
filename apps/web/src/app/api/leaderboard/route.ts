@@ -1,38 +1,53 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
-import Leaderboard from "@/models/Leaderboard";
 import User from "@/models/User";
 
-export async function GET(req: Request) {
+export const dynamic = "force-dynamic";
+
+export async function GET(req: NextRequest) {
   try {
     await dbConnect();
     const { searchParams } = new URL(req.url);
     const gameId = searchParams.get("gameId");
 
+    let users;
+    let entries;
+
     if (!gameId || gameId === "global") {
-      // Global Leaderboard (Top Spenders or Hearts?)
-      // Let's do Top Spenders for now as a global metric
-      const topUsers = await User.find({})
+      // Global Leaderboard: Top Spenders
+      users = await User.find({ totalSpentCELO: { $gt: 0 } })
         .sort({ totalSpentCELO: -1 })
         .limit(50)
         .select("username avatar totalSpentCELO");
 
-      const entries = topUsers.map((u) => ({
-        userId: u._id,
-        username: u.username,
-        avatar: u.avatar,
-        score: u.totalSpentCELO, // Display spent amount as score
+      entries = users.map((user) => ({
+        userId: user._id,
+        username: user.username,
+        avatar: user.avatar,
+        score: user.totalSpentCELO.toFixed(2), // Display as string for currency
+        isCurrency: true,
       }));
-
-      return NextResponse.json({ entries });
     } else {
-      // Game Specific Leaderboard
-      const leaderboard = await Leaderboard.findOne({ gameId });
-      if (!leaderboard) {
-        return NextResponse.json({ entries: [] });
-      }
-      return NextResponse.json({ entries: leaderboard.entries });
+      // Game Leaderboard: Top Scorers
+      // We need to query based on the map field `highScores.<gameId>`
+      // Mongoose allows querying map fields using dot notation
+      const queryKey = `highScores.${gameId}`;
+
+      users = await User.find({ [queryKey]: { $exists: true } })
+        .sort({ [queryKey]: -1 })
+        .limit(50)
+        .select(`username avatar ${queryKey}`);
+
+      entries = users.map((user) => ({
+        userId: user._id,
+        username: user.username,
+        avatar: user.avatar,
+        score: user.highScores.get(gameId),
+        isCurrency: false,
+      }));
     }
+
+    return NextResponse.json({ entries });
   } catch (error) {
     console.error("Error fetching leaderboard:", error);
     return NextResponse.json(

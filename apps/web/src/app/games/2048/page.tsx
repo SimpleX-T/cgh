@@ -14,12 +14,14 @@ import {
 import { useSwipeable } from "react-swipeable";
 import { GamePowerups, type PowerupType } from "@/components/game-powerups";
 import { useUserProfile } from "@/hooks/use-user-profile";
+import { useSaveScore } from "@/hooks/use-save-score";
 import { toast } from "sonner";
 
 const GRID_SIZE = 4;
 
 export default function Game2048() {
   const { consumeLife } = useUserProfile();
+  const { mutate: saveScore } = useSaveScore();
   const [board, setBoard] = useState<number[][]>([]);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
@@ -147,6 +149,7 @@ export default function Game2048() {
         if (checkGameOver(newBoard)) {
           setGameOver(true);
           consumeLife();
+          saveScore({ gameId: "2048", score: newScore });
         }
       } else {
         // Pop history if move didn't happen

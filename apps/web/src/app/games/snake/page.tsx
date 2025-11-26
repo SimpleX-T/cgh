@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
 import { useUserProfile } from "@/hooks/use-user-profile";
+import { useSaveScore } from "@/hooks/use-save-score";
 
 const GRID_SIZE = 20;
 const INITIAL_SPEED = 150;
@@ -16,6 +17,7 @@ type Position = { x: number; y: number };
 
 export default function Snake() {
   const { consumeLife } = useUserProfile();
+  const { mutate: saveScore } = useSaveScore();
   const [snake, setSnake] = useState<Position[]>([{ x: 10, y: 10 }]);
   const [food, setFood] = useState<Position>({ x: 15, y: 15 });
   const [direction, setDirection] = useState<Direction>("RIGHT");
@@ -107,6 +109,7 @@ export default function Snake() {
       ) {
         setIsGameOver(true);
         consumeLife();
+        saveScore({ gameId: "snake", score });
         if (score > highScore) {
           setHighScore(score);
           localStorage.setItem("snake-highscore", score.toString());
