@@ -19,10 +19,12 @@ export const publicClient = createPublicClient({
 export const PLATFORM_WALLET_ADDRESS = process.env
   .NEXT_PUBLIC_PLATFORM_WALLET_ADDRESS as `0x${string}`;
 
+import { getEthereum } from "./ethereum";
+
 export const walletClient =
-  typeof window !== "undefined"
+  typeof window !== "undefined" && getEthereum()
     ? createWalletClient({
         chain: network,
-        transport: custom(window.ethereum!),
+        transport: custom(getEthereum()),
       })
     : null;

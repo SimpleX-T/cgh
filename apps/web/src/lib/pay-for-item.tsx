@@ -10,6 +10,10 @@ import { publicClient } from "./viem";
 
 // Wallet client creation moved inside function to avoid SSR issues
 
+import { getEthereum } from "./web3/ethereum";
+
+// ...
+
 export async function payForItem(
   senderAddress: `0x${string}`,
   tokenAddress: `0x${string}`,
@@ -17,13 +21,14 @@ export async function payForItem(
   tokenDecimals: number,
   receiverAddress: `0x${string}`
 ) {
-  if (typeof window === "undefined" || !window.ethereum) {
+  const ethereum = getEthereum();
+  if (!ethereum) {
     throw new Error("No crypto wallet found");
   }
 
   const walletClient = createWalletClient({
     chain: celo,
-    transport: custom(window.ethereum),
+    transport: custom(ethereum),
   });
 
   const hash = await walletClient.sendTransaction({

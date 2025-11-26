@@ -13,6 +13,8 @@ import {
 import { cn } from "@/lib/utils";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { StoreModal } from "@/components/store-modal";
+import { ConnectButton } from "@/components/connect-button";
+import { useAccount } from "wagmi";
 
 interface GameWrapperProps {
   children: ReactNode;
@@ -38,7 +40,8 @@ export function GameWrapper({
   stats = [],
 }: GameWrapperProps) {
   const router = useRouter();
-  const { profile } = useUserProfile();
+  const { address } = useAccount();
+  const { profile, isLoading } = useUserProfile();
   const [isStoreOpen, setIsStoreOpen] = useState(false);
 
   const hasLives = profile ? profile.heartsBalance > 0 : true; // Default to true while loading
@@ -136,11 +139,35 @@ export function GameWrapper({
       )}
 
       {/* Game Content */}
+      {/* Game Content */}
       <main className="flex-1 container mx-auto px-4 py-8 relative">
-        {children}
+        {/* Access Control Overlay */}
+        {(!address || !profile?.username) && !isLoading ? (
+          <div className="absolute inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center">
+            <div className="bg-card border p-8 rounded-2xl shadow-2xl max-w-md w-full text-center space-y-6">
+              <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                <Lock className="w-10 h-10 text-primary" />
+              </div>
+
+              <div className="space-y-2">
+                <h2 className="text-2xl font-bold">Login Required</h2>
+                <p className="text-muted-foreground">
+                  Connect your wallet to play games, save your high scores, and
+                  compete on the leaderboard.
+                </p>
+              </div>
+
+              <div className="flex justify-center">
+                <ConnectButton />
+              </div>
+            </div>
+          </div>
+        ) : (
+          children
+        )}
 
         {/* Out of Lives Overlay */}
-        {!hasLives && (
+        {address && profile?.username && !hasLives && (
           <div className="absolute inset-0 z-40 bg-background/80 backdrop-blur-sm flex items-center justify-center">
             <div className="bg-card border p-8 rounded-2xl shadow-2xl max-w-md w-full text-center space-y-6">
               <div className="w-20 h-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto">

@@ -11,11 +11,14 @@ declare global {
   }
 }
 
+import { getEthereum } from "./ethereum";
+
 export const getWalletClient = () => {
-  if (typeof window !== "undefined" && window.ethereum) {
+  const ethereum = getEthereum();
+  if (ethereum) {
     return createWalletClient({
       chain: network,
-      transport: custom(window.ethereum),
+      transport: custom(ethereum),
     });
   }
   return null;
@@ -33,7 +36,8 @@ export const connectWallet = async () => {
 };
 
 export const isMiniPay = () => {
-  return typeof window !== "undefined" && window.ethereum?.isMiniPay === true;
+  const ethereum = getEthereum();
+  return ethereum?.isMiniPay === true;
 };
 
 export const sendPayment = async (amountCELO: string) => {
