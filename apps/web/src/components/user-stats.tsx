@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useWallet } from "@/components/WalletProvider";
+import { useAccount } from "wagmi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heart, Zap, Coins, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ interface UserProfile {
 }
 
 export function UserStats() {
-  const { address } = useWallet();
+  const { address } = useAccount();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -58,7 +58,10 @@ export function UserStats() {
             {profile.heartsBalance < 5 && profile.heartRefill.nextFreeRefillAt
               ? `Next refill: ${new Date(
                   profile.heartRefill.nextFreeRefillAt
-                ).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                ).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}`
               : "Max capacity"}
           </p>
         </CardContent>

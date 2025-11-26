@@ -7,7 +7,7 @@ import { Menu, ExternalLink } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { WalletConnectButton } from "@/components/connect-button";
+import { ConnectButton as WalletConnectButton } from "@/components/connect-button";
 
 const navLinks = [
   { name: "Home", href: "/" },
