@@ -60,10 +60,10 @@ function checkWin(board: number[][], player: number): boolean {
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const matchId = params.id;
+  const matchId = (await context.params).id;
 
   try {
     const { userId, column } = await req.json();
