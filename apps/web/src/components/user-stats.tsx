@@ -2,8 +2,8 @@
 
 import { useAccount } from "wagmi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Zap, Coins } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface UserProfile {
   username: string;
@@ -56,7 +56,13 @@ export function UserStats() {
       <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Hearts</CardTitle>
-          <Heart className="h-4 w-4 text-red-500 fill-red-500" />
+          <Image
+            src="/heart.png"
+            alt="Heart"
+            width={200}
+            height={200}
+            className="w-12 h-12 object-contain"
+          />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{profile.heartsBalance}/5</div>
@@ -76,7 +82,13 @@ export function UserStats() {
       <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Spent</CardTitle>
-          <Coins className="h-4 w-4 text-yellow-500" />
+          <Image
+            src="/coins.png"
+            alt="Coin"
+            width={200}
+            height={200}
+            className="w-12 h-12 object-contain"
+          />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
@@ -89,7 +101,13 @@ export function UserStats() {
       <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Premium Games</CardTitle>
-          <Zap className="h-4 w-4 text-purple-500" />
+          <Image
+            src="/gem.png"
+            alt="Gem"
+            width={200}
+            height={200}
+            className="w-12 h-12 object-contain"
+          />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">

@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   description: "A collection of classic games built on Celo and MiniPay",
 };
 
+import { Providers } from "@/components/providers";
+
+// ... imports
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,17 +28,19 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`font-sans antialiased ${orbitron.variable}`}>
-        <WalletProvider>
-          {children}
-          <Toaster
-            richColors
-            position="top-right"
-            duration={5000}
-            // closeButton
-          />
-          <RegisterModal />
-          {/* <AiChatAssistant /> */}
-        </WalletProvider>
+        <Providers>
+          <WalletProvider>
+            {children}
+            <Toaster
+              richColors
+              position="top-right"
+              duration={5000}
+              // closeButton
+            />
+            <RegisterModal />
+            {/* <AiChatAssistant /> */}
+          </WalletProvider>
+        </Providers>
       </body>
     </html>
   );

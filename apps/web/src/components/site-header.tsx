@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, Clock, Search, Ghost, Clover, Plus } from "lucide-react";
+import {
+  Heart,
+  Clock,
+  Search,
+  Ghost,
+  Clover,
+  Plus,
+  Trophy,
+} from "lucide-react";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
@@ -46,7 +54,8 @@ export function SiteHeader() {
             href="/leaderboard"
             className="text-sm font-medium hover:text-primary transition-colors mr-2"
           >
-            Leaderboard
+            <Trophy className="w-4 h-4 mr-2 md:hidden" />
+            <span className="hidden md:block">Leaderboard</span>
           </Link>
           {profile && (
             <div className="flex items-center space-x-4 mr-4">
