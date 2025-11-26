@@ -33,23 +33,33 @@ export async function GET(req: Request) {
         const newBalance = Math.min(user.heartsBalance + heartsToAdd, 5); // Refill up to 5
 
         if (newBalance > user.heartsBalance) {
-            user.heartsBalance = newBalance;
-            user.heartRefill.lastFreeRefillAt = now;
-            // Calculate next refill time
-            if (newBalance < 5) {
-                user.heartRefill.nextFreeRefillAt = new Date(now.getTime() + 30 * 60 * 1000);
-            } else {
-                user.heartRefill.nextFreeRefillAt = null;
-            }
-            await user.save();
+          user.heartsBalance = newBalance;
+          user.heartRefill.lastFreeRefillAt = now;
+          // Calculate next refill time
+          if (newBalance < 5) {
+            user.heartRefill.nextFreeRefillAt = new Date(
+              now.getTime() + 30 * 60 * 1000
+            );
+          } else {
+            user.heartRefill.nextFreeRefillAt = null;
+          }
+          await user.save();
         }
       } else {
-          // Update next refill time for frontend display
-          user.heartRefill.nextFreeRefillAt = new Date(new Date(lastRefill).getTime() + 30 * 60 * 1000);
+        // Update next refill time for frontend display
+        user.heartRefill.nextFreeRefillAt = new Date(
+          new Date(lastRefill).getTime() + 30 * 60 * 1000
+        );
       }
     }
 
-    return NextResponse.json({ user });
+    // Calculate Global Rank
+    const rank =
+      (await User.countDocuments({
+        totalSpentCELO: { $gt: user.totalSpentCELO },
+      })) + 1;
+
+    return NextResponse.json({ user, rank });
   } catch (error) {
     console.error("Error fetching profile:", error);
     return NextResponse.json(

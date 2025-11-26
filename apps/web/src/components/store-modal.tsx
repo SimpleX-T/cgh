@@ -22,7 +22,7 @@ import { useAccount, useWalletClient } from "wagmi";
 import { parseUnits } from "viem";
 import { publicClient } from "@/lib/viem";
 import { stableTokenABI } from "@celo/abis";
-import { RECEIVER_ADDRESS, TOKEN_ADDRESSES } from "@/lib/constants";
+import { CURRENT_CUSD_ADDRESS, RECEIVER_ADDRESS } from "@/lib/constants";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -111,7 +111,7 @@ export function StoreModal({ isOpen, onClose }: StoreModalProps) {
 
       // 1. Send Payment
       const txHash = await walletClient.writeContract({
-        address: TOKEN_ADDRESSES.cUSD,
+        address: CURRENT_CUSD_ADDRESS,
         abi: stableTokenABI,
         functionName: "transfer",
         args: [RECEIVER_ADDRESS, parseUnits(totalPrice.toFixed(2), 18)],

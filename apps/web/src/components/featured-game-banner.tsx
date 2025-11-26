@@ -9,7 +9,7 @@ import { motion } from "motion/react";
 import { useAccount, useWalletClient } from "wagmi";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { publicClient } from "@/lib/viem";
-import { RECEIVER_ADDRESS, TOKEN_ADDRESSES } from "@/lib/constants";
+import { CURRENT_CUSD_ADDRESS, RECEIVER_ADDRESS } from "@/lib/constants";
 import { stableTokenABI } from "@celo/abis";
 import { parseUnits } from "viem";
 import { toast } from "sonner";
@@ -35,7 +35,7 @@ export function FeaturedGameBanner() {
       toast("Started Payment...");
 
       const txHash = await walletClient.writeContract({
-        address: TOKEN_ADDRESSES.cUSD,
+        address: CURRENT_CUSD_ADDRESS,
         abi: stableTokenABI,
         functionName: "transfer",
         args: [RECEIVER_ADDRESS, parseUnits("0.1", 18)],

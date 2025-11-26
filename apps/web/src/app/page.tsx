@@ -10,6 +10,7 @@ import { Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { AnalyticsEngine } from "@/lib/analytics";
+import { UserStats } from "@/components/user-stats";
 
 // import { UserStats } from "@/components/user-stats";
 
@@ -51,7 +52,7 @@ export default function Home() {
 
       <main className="flex-1">
         <section className="container px-4 mx-auto pb-12 pt-8">
-          {/* <UserStats /> */}
+          <UserStats />
         </section>
 
         {/* Games Grid */}
@@ -85,6 +86,8 @@ export default function Home() {
           More games coming soon... 🚀
         </p>
       </div>
+
+      <SiteFooter />
     </div>
   );
 }

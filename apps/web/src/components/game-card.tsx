@@ -6,10 +6,9 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useState } from "react";
 import { useAccount, useWalletClient } from "wagmi";
-import { payForItem } from "@/lib/pay-for-item";
-import { RECEIVER_ADDRESS, TOKEN_ADDRESSES } from "@/lib/constants";
+import { CURRENT_CUSD_ADDRESS, RECEIVER_ADDRESS } from "@/lib/constants";
 import { toast } from "sonner";
-import { encodeFunctionData, parseUnits } from "viem";
+import { parseUnits } from "viem";
 import { stableTokenABI } from "@celo/abis";
 import { publicClient } from "@/lib/viem";
 
@@ -27,7 +26,7 @@ export function GameCard({ game, isUnlocked = true, onUnlock }: GameCardProps) {
   const Icon =
     typeof game.icon === "string" ? (
       <Image
-        src={game.icon}
+        src={game.icon || "/"}
         alt={game.title}
         width={24}
         height={24}
@@ -48,7 +47,7 @@ export function GameCard({ game, isUnlocked = true, onUnlock }: GameCardProps) {
 
     // Check your cUSD balance first
     const balance = await publicClient.readContract({
-      address: TOKEN_ADDRESSES.cUSD,
+      address: CURRENT_CUSD_ADDRESS,
       abi: stableTokenABI,
       functionName: "balanceOf",
       args: [address as `0x${string}`],
@@ -70,7 +69,7 @@ export function GameCard({ game, isUnlocked = true, onUnlock }: GameCardProps) {
       }
 
       const txHash = await walletClient.writeContract({
-        address: TOKEN_ADDRESSES.cUSD,
+        address: CURRENT_CUSD_ADDRESS,
         abi: stableTokenABI,
         functionName: "transfer",
         args: [RECEIVER_ADDRESS, parseUnits("0.1", 18)],

@@ -1,6 +1,6 @@
 import { formatEther, parseAbiItem, decodeEventLog } from "viem";
 import { publicClient } from "./client";
-import { RECEIVER_ADDRESS, TOKEN_ADDRESSES } from "../constants";
+import { CURRENT_CUSD_ADDRESS, RECEIVER_ADDRESS } from "../constants";
 
 export async function verifyTransaction(
   txHash: string,
@@ -32,7 +32,7 @@ export async function verifyTransaction(
 
     for (const log of receipt.logs) {
       // Check if log is from cUSD contract
-      if (log.address.toLowerCase() !== TOKEN_ADDRESSES.cUSD.toLowerCase()) {
+      if (log.address.toLowerCase() !== CURRENT_CUSD_ADDRESS.toLowerCase()) {
         continue;
       }
 

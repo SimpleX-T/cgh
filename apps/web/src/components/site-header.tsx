@@ -113,7 +113,7 @@ export function SiteHeader() {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="flex items-center space-x-1">
+                      <div className="hidden sm:flex items-center space-x-1">
                         <Clock className="w-3.5 h-3.5 text-cyan-400" />
                         <span className="text-xs font-medium">
                           {profile.powerupBalances.timefreeze}
@@ -124,12 +124,12 @@ export function SiteHeader() {
                   </Tooltip>
                 </TooltipProvider>
 
-                <div className="w-[1px] h-3 bg-border/50" />
+                <div className="hidden sm:block w-[1px] h-3 bg-border/50" />
 
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="flex items-center space-x-1">
+                      <div className="hidden sm:flex items-center space-x-1">
                         <Clover className="w-3.5 h-3.5 text-green-400" />
                         <span className="text-xs font-medium">
                           {profile.powerupBalances.lucky}

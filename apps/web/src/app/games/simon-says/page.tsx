@@ -93,8 +93,8 @@ export default function SimonSays() {
       onReset={startGame}
       accentColor="text-indigo-500"
     >
-      <div className="flex flex-col items-center justify-center gap-8">
-        <div className="relative w-64 h-64 sm:w-80 sm:h-80">
+      <div className="flex flex-col items-center justify-center gap-8 p-8 border border-white">
+        <div className="relative w-64 h-64 sm:w-80 sm:h-80 my-12 border border-white">
           <div className="grid grid-cols-2 gap-4 w-full h-full rotate-45">
             {COLORS.map((btn) => (
               <motion.div

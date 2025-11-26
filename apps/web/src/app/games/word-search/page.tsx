@@ -238,6 +238,36 @@ export default function WordSearch() {
     return selectedCells.some((cell) => cell.r === r && cell.c === c);
   };
 
+  const handleTouchStart = (e: React.TouchEvent, r: number, c: number) => {
+    if (isGameOver) return;
+    // Prevent default to stop scrolling while dragging
+    // e.preventDefault(); // Note: might block scrolling entirely on the grid, which is usually desired for games
+    setIsDragging(true);
+    setSelectedCells([{ r, c }]);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || isGameOver) return;
+
+    const touch = e.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+
+    if (target instanceof HTMLElement) {
+      const rowStr = target.getAttribute("data-row");
+      const colStr = target.getAttribute("data-col");
+
+      if (rowStr && colStr) {
+        const r = parseInt(rowStr);
+        const c = parseInt(colStr);
+        handleMouseEnter(r, c); // Reuse the logic from mouse enter
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    handleMouseUp(); // Reuse mouse up logic
+  };
+
   return (
     <GameWrapper
       title="Word Search"
@@ -256,19 +286,26 @@ export default function WordSearch() {
       <div
         className="flex flex-col items-center gap-6"
         onMouseUp={handleMouseUp}
+        // Attach touch end to the container to catch lifts anywhere
+        onTouchEnd={handleTouchEnd}
       >
         <div
           className="grid gap-[2px] bg-gray-300 p-2 rounded-lg select-none touch-none"
           style={{
             gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
           }}
+          // Attach touch move to the grid container
+          onTouchMove={handleTouchMove}
         >
           {grid.map((row, r) =>
             row.map((letter, c) => (
               <div
                 key={`${r}-${c}`}
+                data-row={r}
+                data-col={c}
                 onMouseDown={() => handleMouseDown(r, c)}
                 onMouseEnter={() => handleMouseEnter(r, c)}
+                onTouchStart={(e) => handleTouchStart(e, r, c)}
                 className={cn(
                   "w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center text-sm sm:text-base font-bold rounded-sm cursor-pointer transition-colors",
                   isFound(r, c)

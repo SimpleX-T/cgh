@@ -5,6 +5,7 @@ import { GameWrapper } from "@/components/game-wrapper";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, RotateCw, ChevronLeft, ChevronRight } from "lucide-react";
 import { useUserProfile } from "@/hooks/use-user-profile";
+import { useLongPress } from "@/hooks/use-long-press";
 
 const TETROMINOS = {
   I: {
@@ -311,7 +312,7 @@ export default function Tetris() {
             size="icon"
             variant="outline"
             className="h-14 w-14 rounded-full bg-transparent"
-            onClick={() => move(-1, 0)}
+            {...useLongPress(() => move(-1, 0))}
           >
             <ChevronLeft />
           </Button>
@@ -319,7 +320,7 @@ export default function Tetris() {
             size="icon"
             variant="outline"
             className="h-14 w-14 rounded-full bg-transparent"
-            onClick={() => move(0, 1)}
+            {...useLongPress(() => move(0, 1), 50)} // Faster drop
           >
             <ChevronDown />
           </Button>
@@ -327,7 +328,7 @@ export default function Tetris() {
             size="icon"
             variant="outline"
             className="h-14 w-14 rounded-full bg-transparent"
-            onClick={() => move(1, 0)}
+            {...useLongPress(() => move(1, 0))}
           >
             <ChevronRight />
           </Button>

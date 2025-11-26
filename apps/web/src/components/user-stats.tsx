@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Zap, Coins, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Heart, Zap, Coins } from "lucide-react";
+import Link from "next/link";
 
 interface UserProfile {
+  username: string;
+  avatar: string;
   heartsBalance: number;
   totalSpentCELO: number;
   premiumGamesUnlocked: string[];
@@ -15,38 +16,43 @@ interface UserProfile {
   };
 }
 
+import { useUserProfile } from "@/hooks/use-user-profile";
+
 export function UserStats() {
   const { address } = useAccount();
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (!address) return;
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/user/profile?address=${address}`);
-        if (res.ok) {
-          const data = await res.json();
-          setProfile(data.user);
-        }
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-    // Poll every minute for updates (e.g. heart refill)
-    const interval = setInterval(fetchProfile, 60000);
-    return () => clearInterval(interval);
-  }, [address]);
+  const { profile, rank, isLoading } = useUserProfile();
 
   if (!address || !profile) return null;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+      {/* User Info Card */}
+      <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Profile</CardTitle>
+          <div className="h-12 w-12 rounded-full overflow-hidden relative">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={profile.avatar}
+              alt="Avatar"
+              width={100}
+              height={100}
+              className="object-cover w-full h-full"
+            />
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="text-lg font-bold truncate">{profile.username}</div>
+          <Link
+            href="/leaderboard"
+            prefetch
+            className="text-xs text-muted-foreground text-primary hover:underline"
+          >
+            Rank: {rank ? `#${rank}` : "Unranked"}
+          </Link>
+        </CardContent>
+      </Card>
+
       <Card className="bg-card/50 backdrop-blur-sm border-primary/20">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Hearts</CardTitle>
@@ -92,8 +98,6 @@ export function UserStats() {
           <p className="text-xs text-muted-foreground">Unlocked forever</p>
         </CardContent>
       </Card>
-
-      {/* Add a Buy Hearts button or similar actions here if needed */}
     </div>
   );
 }
