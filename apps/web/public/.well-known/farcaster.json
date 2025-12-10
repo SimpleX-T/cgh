@@ -1,0 +1,26 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjgzNDY5NiwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDhEREFlNENDZjVGQjJhY2E4RTdGYWNlNUUyNGJFNzI4NDVBRGYyMkYifQ",
+    "payload": "eyJkb21haW4iOiJncmFudC1odWItcHNpLnZlcmNlbC5hcHAifQ",
+    "signature": "TbpT5/8pUWoqaHhl/jrV2A6R6rBVB3SpwQzvO1zduztb22Qokluv6SFU5vNnhFlReLxt/hDx/jPXGNhwPPsI5xw="
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Celo Game Hub",
+    "iconUrl": "https://cghapp.vercel.app/CELO.png",
+    "homeUrl": "https://cghapp.vercel.app",
+    "splashImageUrl": "https://cghapp.vercel.app/CELO.png",
+    "splashBackgroundColor": "#000000",
+    "webhookUrl": "https://cghapp.vercel.app/api/webhook",
+    "subtitle": "All your favorite games in one place",
+    "description": "Explore and play your favorite games and get rewarded onchain.",
+    "primaryCategory": "gaming",
+    "tags": ["gaming", "fun", "web3", "builders", "games"],
+    "tagline": "Explore and play your favorite games and get rewarded onchain.",
+    "ogTitle": "Celo Game Hub",
+    "ogDescription": "Explore and play your favorite games and get rewarded onchain.",
+    "heroImageUrl": "https://cghapp.vercel.app/api/opengraph-image",
+    "ogImageUrl": "https://cghapp.vercel.app/api/opengraph-image",
+    "requiredCapabilities": ["actions.signIn", "wallet.getEthereumProvider"]
+  }
+}
