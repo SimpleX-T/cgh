@@ -13,9 +13,18 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { WagmiProvider, createConfig, http, useConnect } from "wagmi";
+import {
+  WagmiProvider,
+  createConfig,
+  http,
+  useConnect,
+  cookieStorage,
+  createStorage,
+} from "wagmi";
 import { celo, celoAlfajores, celoSepolia } from "wagmi/chains";
 import { getEthereum } from "@/lib/web3/ethereum";
+import { farcasterMiniApp } from "@farcaster/miniapp-wagmi-connector";
+import { sdk } from "@farcaster/miniapp-sdk";
 
 const connectors = connectorsForWallets(
   [
@@ -35,15 +44,20 @@ const connectors = connectorsForWallets(
   }
 );
 
+const allConnectors = [...connectors, farcasterMiniApp()];
+
 const wagmiConfig = createConfig({
   chains: [celo, celoAlfajores, celoSepolia],
-  connectors,
+  connectors: allConnectors,
   transports: {
     [celo.id]: http(),
     [celoAlfajores.id]: http(),
     [celoSepolia.id]: http(),
   },
   ssr: true,
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
 });
 
 const queryClient = new QueryClient();
@@ -63,6 +77,14 @@ function WalletProviderInner({ children }: { children: React.ReactNode }) {
         connect({ connector: injectedConnector });
       }
     }
+
+    // Initialize Farcaster MiniApp SDK
+    const initFarcaster = async () => {
+      // Initialize the SDK to hide splash screen
+      await sdk.actions.ready();
+    };
+
+    initFarcaster();
   }, [connect, connectors]);
 
   return <>{children}</>;
