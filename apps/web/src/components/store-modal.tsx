@@ -165,7 +165,7 @@ export function StoreModal({ isOpen, onClose }: StoreModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] bg-background/95 backdrop-blur-xl border-primary/20">
+      <DialogContent className="sm:max-w-[600px] bg-background/95 backdrop-blur-xl border-primary/20 h-[450px] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-2">
             <Coins className="w-6 h-6 text-yellow-500" />
@@ -176,7 +176,7 @@ export function StoreModal({ isOpen, onClose }: StoreModalProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 flex-1 overflow-y-auto pr-2">
           {POWERUPS.map((powerup) => {
             const quantity = getQuantity(powerup.id);
             const totalPrice = (powerup.price * quantity).toFixed(2);
